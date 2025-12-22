@@ -13,8 +13,8 @@ import com.wangninghao.a202305100111.endtest01_tomato_focusflow.data.database.Fo
  * 历史记录组适配器
  */
 class HistoryGroupAdapter(
-    private val groupedRecords: Map<String, List<FocusRecord>>,
-    private val dateHeaders: List<String>,
+    private var groupedRecords: Map<String, List<FocusRecord>>,
+    private var dateHeaders: List<String>,
     private val onDeleteClickListener: HistoryRecordAdapter.OnDeleteClickListener
 ) : RecyclerView.Adapter<HistoryGroupAdapter.ViewHolder>() {
     
@@ -45,4 +45,13 @@ class HistoryGroupAdapter(
     }
     
     override fun getItemCount(): Int = dateHeaders.size
+    
+    /**
+     * 更新数据
+     */
+    fun updateData(newGroupedRecords: Map<String, List<FocusRecord>>, newDateHeaders: List<String>) {
+        this.groupedRecords = newGroupedRecords
+        this.dateHeaders = newDateHeaders
+        notifyDataSetChanged()
+    }
 }

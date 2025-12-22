@@ -74,6 +74,22 @@ class CircularTimerView @JvmOverloads constructor(
     }
     
     /**
+     * 设置总时间
+     */
+    fun setTotalTime(totalTime: Long) {
+        this.totalTime = totalTime
+        invalidate()
+    }
+    
+    /**
+     * 设置剩余时间
+     */
+    fun setRemainingTime(remainingTime: Long) {
+        this.remainingTime = remainingTime
+        invalidate()
+    }
+    
+    /**
      * 设置运行状态
      */
     fun setRunning(isRunning: Boolean) {
