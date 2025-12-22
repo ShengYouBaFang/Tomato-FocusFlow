@@ -1,7 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Endtest01_Tomato_FocusFlow" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/tomato_primary_light</item>
+        <item name="colorPrimaryVariant">@color/tomato_primary</item>
+        <item name="colorOnPrimary">@color/black</item>
+        
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/mint_secondary_light</item>
+        <item name="colorSecondaryVariant">@color/mint_secondary</item>
+        <item name="colorOnSecondary">@color/black</item>
+        
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/background_dark</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnBackground">@color/text_primary_dark</item>
+        <item name="colorOnSurface">@color/text_primary_dark</item>
+        
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/background_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>

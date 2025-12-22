@@ -1,9 +1,33 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Endtest01_Tomato_FocusFlow" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/tomato_primary</item>
+        <item name="colorPrimaryVariant">@color/tomato_primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/mint_secondary</item>
+        <item name="colorSecondaryVariant">@color/mint_secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnBackground">@color/text_primary_light</item>
+        <item name="colorOnSurface">@color/text_primary_light</item>
+        
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/tomato_primary</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="Theme.Endtest01_Tomato_FocusFlow" parent="Base.Theme.Endtest01_Tomato_FocusFlow" />
+    
+    <!-- Splash Theme -->
+    <style name="Theme.Splash" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@color/tomato_primary</item>
+        <item name="android:navigationBarColor">@color/tomato_primary</item>
+    </style>
 </resources>

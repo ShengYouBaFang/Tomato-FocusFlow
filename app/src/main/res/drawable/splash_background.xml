@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 渐变背景 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="135"
+                android:endColor="@color/tomato_primary_dark"
+                android:startColor="@color/tomato_primary_light"
+                android:type="linear" />
+        </shape>
+    </item>
+    
+    <!-- Logo占位（后续添加实际logo） -->
+    <item
+        android:width="120dp"
+        android:height="120dp"
+        android:gravity="center">
+        <shape android:shape="oval">
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+</layer-list>

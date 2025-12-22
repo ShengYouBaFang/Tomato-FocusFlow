@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_timer">
+
+    <fragment
+        android:id="@+id/nav_timer"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.fragment.TimerFragment"
+        android:label="@string/nav_timer" />
+
+    <fragment
+        android:id="@+id/nav_white_noise"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.fragment.WhiteNoiseFragment"
+        android:label="@string/nav_white_noise" />
+
+    <fragment
+        android:id="@+id/nav_history"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.fragment.HistoryFragment"
+        android:label="@string/nav_history" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.fragment.SettingsFragment"
+        android:label="@string/nav_settings" />
+
+</navigation>

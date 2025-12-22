@@ -1,3 +1,69 @@
 <resources>
-    <string name="app_name">endtest01_Tomato_FocusFlow</string>
+    <!-- 应用名称 -->
+    <string name="app_name">Focus Flow</string>
+    
+    <!-- 开发者信息 -->
+    <string name="developer_name">王宁皓</string>
+    <string name="student_id">202305100111</string>
+    <string name="developer_info">开发者：%1$s\n学号：%2$s</string>
+    
+    <!-- 底部导航 -->
+    <string name="nav_timer">番茄钟</string>
+    <string name="nav_white_noise">白噪音</string>
+    <string name="nav_history">历史</string>
+    <string name="nav_settings">设置</string>
+    <string name="nav_about">关于</string>
+    
+    <!-- 番茄钟页面 -->
+    <string name="timer_start">开始</string>
+    <string name="timer_pause">暂停</string>
+    <string name="timer_resume">继续</string>
+    <string name="timer_stop">停止</string>
+    <string name="timer_25_min">25 分钟</string>
+    <string name="timer_45_min">45 分钟</string>
+    <string name="timer_60_min">60 分钟</string>
+    
+    <!-- 白噪音页面 -->
+    <string name="noise_rain">雨声</string>
+    <string name="noise_forest">林涛</string>
+    <string name="noise_ocean">海浪</string>
+    <string name="noise_cafe">咖啡厅</string>
+    <string name="noise_fire">篝火</string>
+    <string name="volume">音量</string>
+    
+    <!-- 历史页面 -->
+    <string name="history_title">专注历史</string>
+    <string name="history_empty">还没有专注记录</string>
+    <string name="history_total_time">总时长</string>
+    <string name="history_total_count">总次数</string>
+    <string name="history_delete">删除</string>
+    <string name="history_delete_all">清除所有记录</string>
+    <string name="history_delete_confirm">确定要删除所有记录吗？</string>
+    
+    <!-- 设置页面 -->
+    <string name="settings_title">设置</string>
+    <string name="settings_notification">通知</string>
+    <string name="settings_notification_desc">允许显示倒计时通知</string>
+    <string name="settings_default_duration">默认时长</string>
+    <string name="settings_theme">主题</string>
+    <string name="settings_theme_light">浅色</string>
+    <string name="settings_theme_dark">深色</string>
+    <string name="settings_theme_system">跟随系统</string>
+    
+    <!-- 关于页面 -->
+    <string name="about_title">关于</string>
+    <string name="about_version">版本</string>
+    <string name="about_description">一款简洁优雅的番茄钟应用</string>
+    
+    <!-- 通知 -->
+    <string name="notification_channel_name">倒计时通知</string>
+    <string name="notification_title">专注中</string>
+    <string name="notification_finish_title">完成！</string>
+    <string name="notification_finish_desc">恭喜你完成了一次专注</string>
+    
+    <!-- 通用 -->
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确认</string>
+    <string name="delete">删除</string>
 </resources>
