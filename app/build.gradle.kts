@@ -70,6 +70,9 @@ dependencies {
     // Fragment
     implementation(libs.androidx.fragment.ktx)
     
+    // Preference
+    implementation(libs.androidx.preference.ktx)
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

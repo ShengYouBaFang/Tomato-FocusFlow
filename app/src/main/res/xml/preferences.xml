@@ -1,0 +1,35 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- 通知设置 -->
+    <SwitchPreferenceCompat
+        android:key="notification_enabled"
+        android:title="@string/settings_notification"
+        android:summary="@string/settings_notification_desc"
+        android:defaultValue="true" />
+
+    <!-- 默认时长设置 -->
+    <ListPreference
+        android:key="default_duration"
+        android:title="@string/settings_default_duration"
+        android:entries="@array/duration_entries"
+        android:entryValues="@array/duration_values"
+        android:defaultValue="25"
+        app:useSimpleSummaryProvider="true" />
+
+    <!-- 主题设置 -->
+    <ListPreference
+        android:key="theme_mode"
+        android:title="@string/settings_theme"
+        android:entries="@array/theme_entries"
+        android:entryValues="@array/theme_values"
+        android:defaultValue="2"
+        app:useSimpleSummaryProvider="true" />
+
+    <!-- 清除历史记录 -->
+    <Preference
+        android:key="clear_history"
+        android:title="@string/history_delete_all"
+        android:summary="@string/history_delete_confirm" />
+
+</PreferenceScreen>
