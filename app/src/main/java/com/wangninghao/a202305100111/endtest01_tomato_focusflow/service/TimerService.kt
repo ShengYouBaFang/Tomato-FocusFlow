@@ -194,6 +194,14 @@ class TimerService : Service() {
     }
     
     /**
+     * 发送倒计时完成广播
+     */
+    private fun sendTimerFinishBroadcast() {
+        val intent = Intent(Constants.BROADCAST_TIMER_FINISH)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+    }
+    
+    /**
      * 显示完成通知
      */
     private fun showFinishNotification() {

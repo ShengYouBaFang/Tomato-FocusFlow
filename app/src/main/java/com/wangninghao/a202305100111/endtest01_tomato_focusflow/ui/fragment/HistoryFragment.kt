@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wangninghao.a202305100111.endtest01_tomato_focusflow.R
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.data.database.FocusRecord
@@ -117,6 +118,6 @@ class HistoryFragment : Fragment() {
         binding.totalTimeText.text = totalTimeText
         
         val totalCount = records.size
-        binding.totalCountText.text = "$totalCount次"
+        binding.totalCountText.text = "$totalCount" + getString(R.string.history_total_count)
     }
 }

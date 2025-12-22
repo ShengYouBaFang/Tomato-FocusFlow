@@ -19,6 +19,7 @@
     <string name="timer_pause">暂停</string>
     <string name="timer_resume">继续</string>
     <string name="timer_stop">停止</string>
+    <string name="timer_play">播放</string>
     <string name="timer_25_min">25 分钟</string>
     <string name="timer_45_min">45 分钟</string>
     <string name="timer_60_min">60 分钟</string>

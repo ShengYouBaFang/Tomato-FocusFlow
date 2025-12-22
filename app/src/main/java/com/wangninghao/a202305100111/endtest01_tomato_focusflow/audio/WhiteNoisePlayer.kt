@@ -26,7 +26,36 @@ class WhiteNoisePlayer(private val context: Context) {
     private var audioFocusRequest: AudioFocusRequest? = null
     private var currentAudioRes: Int = -1
     private var currentVolume: Float = 0.5f
-    private var isPlaying = false
+    private var isCurrentlyPlaying = false
+    
+    // 音频焦点变化监听器
+    private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+        when (focusChange) {
+            AudioManager.AUDIOFOCUS_LOSS -> {
+                // 长时间失去音频焦点，停止播放
+                stop()
+                Log.d(TAG, "长时间失去音频焦点，停止播放")
+            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                // 短暂失去音频焦点，暂停播放
+                pause()
+                Log.d(TAG, "短暂失去音频焦点，暂停播放")
+            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                // 短暂失去音频焦点但可以降低音量
+                setVolume(currentVolume * 0.3f)
+                Log.d(TAG, "短暂失去音频焦点但可以降低音量")
+            }
+            AudioManager.AUDIOFOCUS_GAIN -> {
+                // 重新获得音频焦点
+                setVolume(currentVolume)
+                if (!isCurrentlyPlaying) {
+                    resume()
+                }
+                Log.d(TAG, "重新获得音频焦点")
+            }
+        }
+    }
     
     init {
         // 初始化音频焦点请求（Android 8.0+）
@@ -49,7 +78,7 @@ class WhiteNoisePlayer(private val context: Context) {
      * @param volume 音量（0.0 - 1.0）
      */
     fun play(@RawRes audioRes: Int, volume: Float = 0.5f) {
-        if (currentAudioRes == audioRes && isPlaying) {
+        if (currentAudioRes == audioRes && isCurrentlyPlaying) {
             // 如果正在播放相同的音频，只调整音量
             setVolume(volume)
             return
@@ -87,20 +116,20 @@ class WhiteNoisePlayer(private val context: Context) {
                     
                     setOnPreparedListener {
                         start()
-                        isPlaying = true
+                        isCurrentlyPlaying = true
                         Log.d(TAG, "开始播放音频: $audioRes")
                     }
                     
                     setOnErrorListener { _, what, extra ->
                         Log.e(TAG, "播放音频出错: what=$what, extra=$extra")
-                        isPlaying = false
+                        isCurrentlyPlaying = false
                         false
                     }
                 }
             }
         } catch (e: Exception) {
             Log.e(TAG, "播放音频失败", e)
-            isPlaying = false
+            isCurrentlyPlaying = false
         }
     }
     
@@ -111,7 +140,7 @@ class WhiteNoisePlayer(private val context: Context) {
         mediaPlayer?.let {
             if (it.isPlaying) {
                 it.pause()
-                isPlaying = false
+                isCurrentlyPlaying = false
                 Log.d(TAG, "暂停播放")
             }
         }
@@ -126,7 +155,7 @@ class WhiteNoisePlayer(private val context: Context) {
                 // 恢复音频焦点
                 if (requestAudioFocus()) {
                     it.start()
-                    isPlaying = true
+                    isCurrentlyPlaying = true
                     Log.d(TAG, "恢复播放")
                 }
             }
@@ -142,7 +171,7 @@ class WhiteNoisePlayer(private val context: Context) {
                 it.stop()
             }
             it.release()
-            isPlaying = false
+            isCurrentlyPlaying = false
             Log.d(TAG, "停止播放")
         }
         mediaPlayer = null
@@ -164,7 +193,7 @@ class WhiteNoisePlayer(private val context: Context) {
      * 是否正在播放
      */
     fun isPlaying(): Boolean {
-        return isPlaying
+        return isCurrentlyPlaying
     }
     
     /**
@@ -205,37 +234,6 @@ class WhiteNoisePlayer(private val context: Context) {
         } else {
             @Suppress("DEPRECATION")
             audioManager.abandonAudioFocus(audioFocusListener)
-        }
-    }
-    
-    /**
-     * 音频焦点变化监听器
-     */
-    private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-        when (focusChange) {
-            AudioManager.AUDIOFOCUS_LOSS -> {
-                // 长时间失去音频焦点，停止播放
-                stop()
-                Log.d(TAG, "长时间失去音频焦点，停止播放")
-            }
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                // 短暂失去音频焦点，暂停播放
-                pause()
-                Log.d(TAG, "短暂失去音频焦点，暂停播放")
-            }
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                // 短暂失去音频焦点但可以降低音量
-                setVolume(currentVolume * 0.3f)
-                Log.d(TAG, "短暂失去音频焦点但可以降低音量")
-            }
-            AudioManager.AUDIOFOCUS_GAIN -> {
-                // 重新获得音频焦点
-                setVolume(currentVolume)
-                if (!isPlaying) {
-                    resume()
-                }
-                Log.d(TAG, "重新获得音频焦点")
-            }
         }
     }
     

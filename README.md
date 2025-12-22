@@ -571,9 +571,16 @@ com.wangninghao.a202305100111.endtest01_tomato_focusflow/
 
 #### **任务 3.6：实现 AboutFragment**
 - ✅ 显示应用 Logo 和名称
+  - 使用 ImageView 展示应用图标
+  - TextView 显示 "Focus Flow" 应用名称
 - ✅ 显示版本号
-- ✅ 显示开发者信息（王宁皓 202305100111）
+  - 通过 PackageManager 获取并显示当前应用版本（如 v1.0）
+- ✅ 显示开发者信息
+  - 显示开发者姓名：王宁皓
+  - 显示学号：202305100111
 - ✅ 添加 GitHub 链接（可选）
+  - 使用 Linkify 或 ClickableSpan 实现可点击链接
+  - 跳转到项目的 GitHub 仓库页面
 
 ---
 

@@ -73,6 +73,9 @@ dependencies {
     // Preference
     implementation(libs.androidx.preference.ktx)
     
+    // LocalBroadcastManager
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
