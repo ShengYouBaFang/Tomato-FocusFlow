@@ -1,11 +1,20 @@
 package com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.fragment
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.databinding.FragmentTimerBinding
+import com.wangninghao.a202305100111.endtest01_tomato_focusflow.service.ServiceLifecycleManager
+import com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.customview.CircularTimerView
+import com.wangninghao.a202305100111.endtest01_tomato_focusflow.utils.Constants
+import com.wangninghao.a202305100111.endtest01_tomato_focusflow.utils.TimeFormatter
 
 /**
  * 番茄钟Fragment
@@ -15,6 +24,29 @@ class TimerFragment : Fragment() {
     
     private var _binding: FragmentTimerBinding? = null
     private val binding get() = _binding!!
+    
+    private lateinit var serviceManager: ServiceLifecycleManager
+    private var totalTime: Long = Constants.TIMER_25_MIN
+    private var remainingTime: Long = Constants.TIMER_25_MIN
+    private var isRunning = false
+    
+    // 广播接收器
+    private val timerUpdateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Constants.BROADCAST_TIMER_UPDATE) {
+                remainingTime = intent.getLongExtra(Constants.EXTRA_REMAINING_TIME, totalTime)
+                totalTime = intent.getLongExtra(Constants.EXTRA_DURATION, totalTime)
+                isRunning = intent.getBooleanExtra("isRunning", false)
+                
+                updateUI()
+            }
+        }
+    }
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        serviceManager = ServiceLifecycleManager(requireContext())
+    }
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,11 +59,129 @@ class TimerFragment : Fragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // TODO: 后续实现倒计时逻辑
+        
+        // 初始化UI
+        setupUI()
+        
+        // 注册广播接收器
+        val filter = IntentFilter(Constants.BROADCAST_TIMER_UPDATE)
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(timerUpdateReceiver, filter)
+        
+        // 设置初始时间
+        binding.circularTimerView.setTime(totalTime, remainingTime)
     }
     
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        
+        // 注销广播接收器
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(timerUpdateReceiver)
+    }
+    
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceManager.destroy()
+    }
+    
+    /**
+     * 设置UI控件
+     */
+    private fun setupUI() {
+        // 设置圆形计时器
+        binding.circularTimerView.setOnTimeSetListener(object : CircularTimerView.OnTimeSetListener {
+            override fun onTimeSet(newTotalTime: Long) {
+                totalTime = newTotalTime
+                remainingTime = newTotalTime
+                binding.circularTimerView.setTime(totalTime, remainingTime)
+            }
+        })
+        
+        // 设置时长选择按钮
+        binding.btn25Min.setOnClickListener {
+            setTimerDuration(Constants.TIMER_25_MIN)
+        }
+        
+        binding.btn45Min.setOnClickListener {
+            setTimerDuration(Constants.TIMER_45_MIN)
+        }
+        
+        binding.btn60Min.setOnClickListener {
+            setTimerDuration(Constants.TIMER_60_MIN)
+        }
+        
+        // 设置控制按钮
+        binding.btnStart.setOnClickListener {
+            startTimer()
+        }
+        
+        binding.btnPause.setOnClickListener {
+            pauseTimer()
+        }
+        
+        binding.btnStop.setOnClickListener {
+            stopTimer()
+        }
+    }
+    
+    /**
+     * 设置计时器时长
+     */
+    private fun setTimerDuration(duration: Long) {
+        if (!isRunning) {
+            totalTime = duration
+            remainingTime = duration
+            binding.circularTimerView.setTime(totalTime, remainingTime)
+        }
+    }
+    
+    /**
+     * 开始计时
+     */
+    private fun startTimer() {
+        serviceManager.startTimerService(totalTime)
+        isRunning = true
+        updateControlButtons()
+    }
+    
+    /**
+     * 暂停计时
+     */
+    private fun pauseTimer() {
+        serviceManager.pauseTimerService()
+    }
+    
+    /**
+     * 停止计时
+     */
+    private fun stopTimer() {
+        serviceManager.stopTimerService()
+        isRunning = false
+        remainingTime = totalTime
+        updateUI()
+    }
+    
+    /**
+     * 更新UI
+     */
+    private fun updateUI() {
+        binding.circularTimerView.setTime(totalTime, remainingTime)
+        binding.circularTimerView.setRunning(isRunning)
+        updateControlButtons()
+    }
+    
+    /**
+     * 更新控制按钮状态
+     */
+    private fun updateControlButtons() {
+        if (isRunning) {
+            binding.btnStart.visibility = View.GONE
+            binding.btnPause.visibility = View.VISIBLE
+            binding.btnStop.visibility = View.VISIBLE
+        } else {
+            binding.btnStart.visibility = View.VISIBLE
+            binding.btnPause.visibility = View.GONE
+            binding.btnStop.visibility = View.GONE
+        }
     }
 }
