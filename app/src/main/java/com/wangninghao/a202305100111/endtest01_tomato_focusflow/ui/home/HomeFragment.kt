@@ -81,6 +81,10 @@ class HomeFragment : Fragment() {
                     binding.btnPlayPause.text = "开始"
                     binding.btnPlayPause.isEnabled = true
                     binding.btnReset.isEnabled = false
+                    // 重置后显示设置的倒计时时长
+                    val duration = viewModel.timerDuration.value ?: 25 * 60 * 1000L
+                    binding.tvTime.text = TimeFormatter.formatTime(duration)
+                    binding.circularProgress.setProgress(1f)
                     stopRotationAnimation()
                 }
                 is TimerService.TimerState.Running -> {
@@ -102,7 +106,7 @@ class HomeFragment : Fragment() {
                 is TimerService.TimerState.Completed -> {
                     binding.btnPlayPause.text = "开始"
                     binding.btnPlayPause.isEnabled = true
-                    binding.btnReset.isEnabled = false
+                    binding.btnReset.isEnabled = true
                     binding.tvTime.text = "00:00"
                     binding.circularProgress.setProgress(0f)
                     stopRotationAnimation()

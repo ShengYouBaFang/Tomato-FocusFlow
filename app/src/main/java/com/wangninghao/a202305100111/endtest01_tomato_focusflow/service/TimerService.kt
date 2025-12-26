@@ -279,6 +279,9 @@ class TimerService : Service() {
      */
     private fun onTimerComplete() {
         try {
+            // 停止白噪音
+            mediaPlayerManager?.stop()
+
             // 保存完成记录到数据库
             saveSession(true)
             stopForeground(STOP_FOREGROUND_REMOVE)
