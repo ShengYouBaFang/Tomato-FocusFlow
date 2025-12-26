@@ -160,6 +160,18 @@ class TimerService : Service() {
     }
 
     /**
+     * 重置倒计时
+     */
+    fun resetTimer() {
+        countDownTimer?.cancel()
+        isRunning = false
+        mediaPlayerManager?.stop()
+        _timerState.postValue(TimerState.Idle)
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf()
+    }
+
+    /**
      * 倒计时完成
      */
     private fun onTimerComplete() {
@@ -215,6 +227,13 @@ class TimerService : Service() {
      */
     fun resumeWhiteNoise() {
         mediaPlayerManager?.resume()
+    }
+
+    /**
+     * 停止白噪音
+     */
+    fun stopWhiteNoise() {
+        mediaPlayerManager?.stop()
     }
 
     override fun onDestroy() {

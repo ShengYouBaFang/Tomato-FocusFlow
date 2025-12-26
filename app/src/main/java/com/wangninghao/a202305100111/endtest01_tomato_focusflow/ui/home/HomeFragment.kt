@@ -156,6 +156,12 @@ class HomeFragment : Fragment() {
         binding.ivWhiteNoiseIcon.rotation = 0f
     }
 
+    override fun onResume() {
+        super.onResume()
+        // 刷新设置，以防用户从设置页面返回
+        viewModel.refreshSettings()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         stopRotationAnimation()

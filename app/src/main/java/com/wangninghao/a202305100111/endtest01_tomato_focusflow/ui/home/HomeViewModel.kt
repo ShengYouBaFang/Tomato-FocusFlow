@@ -36,19 +36,25 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val timerDuration: LiveData<Long> = _timerDuration
 
     // 倒计时状态
-    val timerState: LiveData<TimerService.TimerState>
-        get() = timerService?.timerState ?: MutableLiveData(TimerService.TimerState.Idle)
+    private val _timerState = MutableLiveData<TimerService.TimerState>(TimerService.TimerState.Idle)
+    val timerState: LiveData<TimerService.TimerState> = _timerState
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as TimerService.TimerBinder
             timerService = binder.getService()
             isBound = true
+
+            // 观察Service的timer状态并同步到ViewModel
+            timerService?.timerState?.observeForever { state ->
+                _timerState.value = state
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             timerService = null
             isBound = false
+            _timerState.value = TimerService.TimerState.Idle
         }
     }
 
@@ -67,6 +73,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
         val duration = preferenceHelper.getDefaultTimerDuration()
         _timerDuration.value = duration
+    }
+
+    /**
+     * 刷新设置（从SharedPreferences重新加载）
+     */
+    fun refreshSettings() {
+        loadSettings()
     }
 
     /**
@@ -135,8 +148,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
      * 重置倒计时
      */
     fun resetTimer(context: Context) {
-        timerService?.stopTimer()
-        unbindService(context)
+        timerService?.resetTimer()
+        _timerState.value = TimerService.TimerState.Idle
     }
 
     /**
