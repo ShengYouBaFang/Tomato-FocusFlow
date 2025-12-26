@@ -12,114 +12,209 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <ImageView
-            android:id="@+id/iv_app_icon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="48dp"
-            android:contentDescription="@string/app_logo"
-            android:src="@mipmap/ic_launcher"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+        <!-- 应用名称 -->
         <TextView
             android:id="@+id/tv_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="48dp"
             android:text="@string/app_name_display"
-            android:textColor="@color/text_primary"
-            android:textSize="24sp"
+            android:textColor="@color/primary"
+            android:textSize="32sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_app_icon" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- 版本号 -->
         <TextView
             android:id="@+id/tv_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="版本 1.0"
+            android:text="版本 1.0.0"
             android:textColor="@color/text_secondary"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_app_name" />
 
-        <View
-            android:id="@+id/divider"
+        <!-- 应用介绍卡片 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_description"
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="32dp"
-            android:background="@color/text_hint"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_version" />
-
-        <TextView
-            android:id="@+id/tv_developer_title"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="开发者信息"
-            android:textColor="@color/text_primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider" />
+            app:layout_constraintTop_toBottomOf="@id/tv_version">
 
-        <ImageView
-            android:id="@+id/iv_developer"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="关于应用"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="4dp"
+                    android:text="Focus Flow 是一款结合番茄工作法与白噪音播放的专注辅助应用。通过科学的时间管理和沉浸式的背景音效，帮助你保持专注，提高工作和学习效率。"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+                <!-- 功能列表 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="核心功能"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="6dp"
+                    android:text="• 番茄钟倒计时\n• 5种自然白噪音\n• 专注记录统计\n• 数据可视化图表\n• 后台保活支持"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 开发者信息卡片 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_developer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:contentDescription="@string/developer_avatar"
-            android:scaleType="centerCrop"
-            android:src="@drawable/developer"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_developer_title" />
+            app:layout_constraintTop_toBottomOf="@id/card_description">
 
-        <TextView
-            android:id="@+id/tv_developer_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/developer_name"
-            android:textColor="@color/text_primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_developer" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-        <TextView
-            android:id="@+id/tv_student_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/student_id"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_developer_name" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开发者"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_description"
+                <!-- 开发者头像（圆形） -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp">
+
+                    <ImageView
+                        android:id="@+id/iv_developer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/developer_avatar"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/developer" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tv_developer_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/developer_name"
+                    android:textColor="@color/text_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_student_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/student_id"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 技术栈卡片 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_tech"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:gravity="center"
-            android:lineSpacingExtra="4dp"
-            android:text="Focus Flow\n一款专注番茄钟 + 白噪音播放器应用\n帮助你保持专注，提高效率"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_student_id" />
+            app:layout_constraintTop_toBottomOf="@id/card_developer">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="技术栈"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="6dp"
+                    android:text="• Kotlin\n• MVVM 架构\n• Jetpack Components\n• Room Database\n• Coroutines + Flow\n• Material Design 3\n• MPAndroidChart"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 版权信息 -->
+        <TextView
+            android:id="@+id/tv_copyright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="© 2025 Focus Flow\nAll Rights Reserved"
+            android:textAlignment="center"
+            android:textColor="@color/text_hint"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_tech" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

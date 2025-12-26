@@ -9,6 +9,7 @@ object Constants {
     const val DEFAULT_TIMER_MINUTES = 25
     const val QUICK_TIMER_10_MIN = 10 * 60 * 1000L
     const val QUICK_TIMER_15_MIN = 15 * 60 * 1000L
+    const val QUICK_TIMER_25_MIN = 25 * 60 * 1000L
     const val QUICK_TIMER_30_MIN = 30 * 60 * 1000L
 
     // Service相关
