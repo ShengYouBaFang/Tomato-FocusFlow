@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
 
     <!-- Primary Colors - 番茄红主题 -->
     <color name="primary">#FF6B6B</color>

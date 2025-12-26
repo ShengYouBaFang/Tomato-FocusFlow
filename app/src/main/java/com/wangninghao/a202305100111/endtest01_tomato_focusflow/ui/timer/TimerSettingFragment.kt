@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.databinding.FragmentTimerSettingBinding
 
@@ -16,6 +17,8 @@ class TimerSettingFragment : Fragment() {
 
     private var _binding: FragmentTimerSettingBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: TimerSettingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,8 +35,40 @@ class TimerSettingFragment : Fragment() {
     }
 
     private fun setupUI() {
-        // TODO: 后续实现倒计时设置功能
+        // 配置NumberPicker
+        binding.npHours.apply {
+            minValue = 0
+            maxValue = 2
+            value = 0
+        }
+
+        binding.npMinutes.apply {
+            minValue = 0
+            maxValue = 59
+            value = 25
+        }
+
+        // 快捷按钮
+        binding.btn10min.setOnClickListener {
+            viewModel.saveQuickTimer(10)
+            findNavController().navigateUp()
+        }
+
+        binding.btn15min.setOnClickListener {
+            viewModel.saveQuickTimer(15)
+            findNavController().navigateUp()
+        }
+
+        binding.btn30min.setOnClickListener {
+            viewModel.saveQuickTimer(30)
+            findNavController().navigateUp()
+        }
+
+        // 确认按钮
         binding.btnConfirm.setOnClickListener {
+            val hours = binding.npHours.value
+            val minutes = binding.npMinutes.value
+            viewModel.saveTimerDuration(hours, minutes)
             findNavController().navigateUp()
         }
     }

@@ -20,4 +20,8 @@
     <string name="cancel">取消</string>
     <string name="delete">删除</string>
     <string name="save">保存</string>
+    <string name="preview">试听</string>
+
+    <!-- White Noise -->
+    <string name="white_noise_icon">白噪音图标</string>
 </resources>
