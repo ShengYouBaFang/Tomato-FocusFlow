@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.data.local.AppDatabase
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.data.local.entity.FocusSessionEntity
+import com.wangninghao.a202305100111.endtest01_tomato_focusflow.data.repository.WhiteNoiseRepository
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.util.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,7 @@ class TimerService : Service() {
 
     private val binder = TimerBinder()
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val whiteNoiseRepository = WhiteNoiseRepository()
 
     private var countDownTimer: CountDownTimer? = null
     private var mediaPlayerManager: MediaPlayerManager? = null
@@ -76,6 +78,10 @@ class TimerService : Service() {
         remainingTime = duration
         startTime = System.currentTimeMillis()
         whiteNoiseId = noiseId
+
+        // 根据noiseId查询白噪音名称
+        val whiteNoise = whiteNoiseRepository.getWhiteNoiseById(noiseId)
+        whiteNoiseName = whiteNoise?.name ?: "雨声"
 
         startForeground(Constants.NOTIFICATION_ID,
             NotificationHelper.createNotification(this, remainingTime, true))

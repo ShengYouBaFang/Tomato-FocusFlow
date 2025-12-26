@@ -24,4 +24,5 @@
 
     <!-- White Noise -->
     <string name="white_noise_icon">白噪音图标</string>
+    <string name="completed_badge">完成标识</string>
 </resources>
