@@ -6,10 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.R
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.databinding.FragmentHistoryBinding
+import kotlinx.coroutines.launch
 
 /**
  * 历史记录Fragment
@@ -64,17 +68,21 @@ class HistoryFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // 观察历史记录列表
-        viewModel.allSessions.observe(viewLifecycleOwner) { sessions ->
-            adapter.submitList(sessions)
+        // 使用StateFlow观察数据
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.allSessions.collect { sessions ->
+                    adapter.submitList(sessions)
 
-            // 显示/隐藏空状态
-            if (sessions.isEmpty()) {
-                binding.tvEmptyHint.visibility = View.VISIBLE
-                binding.rvHistory.visibility = View.GONE
-            } else {
-                binding.tvEmptyHint.visibility = View.GONE
-                binding.rvHistory.visibility = View.VISIBLE
+                    // 显示/隐藏空状态
+                    if (sessions.isEmpty()) {
+                        binding.tvEmptyHint.visibility = View.VISIBLE
+                        binding.rvHistory.visibility = View.GONE
+                    } else {
+                        binding.tvEmptyHint.visibility = View.GONE
+                        binding.rvHistory.visibility = View.VISIBLE
+                    }
+                }
             }
         }
     }

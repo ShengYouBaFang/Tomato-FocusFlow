@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -17,6 +20,7 @@ import com.wangninghao.a202305100111.endtest01_tomato_focusflow.R
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.data.local.entity.FocusSessionEntity
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.databinding.FragmentStatisticsBinding
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.util.TimeFormatter
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -87,36 +91,68 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // 观察最长记录
-        viewModel.longestSession.observe(viewLifecycleOwner) { session ->
-            if (session != null) {
-                binding.tvLongestDuration.text = TimeFormatter.formatTime(session.duration)
-            } else {
-                binding.tvLongestDuration.text = "--"
-            }
-        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // 观察最长记录
+                launch {
+                    viewModel.longestSession.collect { session ->
+                        try {
+                            if (session != null) {
+                                binding.tvLongestDuration.text = TimeFormatter.formatDuration(session.duration)
+                            } else {
+                                binding.tvLongestDuration.text = "--"
+                            }
+                        } catch (e: Exception) {
+                            binding.tvLongestDuration.text = "--"
+                            e.printStackTrace()
+                        }
+                    }
+                }
 
-        // 观察总时长
-        viewModel.totalDuration.observe(viewLifecycleOwner) { duration ->
-            if (duration != null && duration > 0) {
-                binding.tvTotalDuration.text = formatTotalDuration(duration)
-            } else {
-                binding.tvTotalDuration.text = "--"
-            }
-        }
+                // 观察总时长
+                launch {
+                    viewModel.totalDuration.collect { duration ->
+                        try {
+                            if (duration > 0) {
+                                binding.tvTotalDuration.text = formatTotalDuration(duration)
+                            } else {
+                                binding.tvTotalDuration.text = "--"
+                            }
+                        } catch (e: Exception) {
+                            binding.tvTotalDuration.text = "--"
+                            e.printStackTrace()
+                        }
+                    }
+                }
 
-        // 观察总次数
-        viewModel.totalCount.observe(viewLifecycleOwner) { count ->
-            if (count != null && count > 0) {
-                binding.tvTotalCount.text = "${count}次"
-            } else {
-                binding.tvTotalCount.text = "--"
-            }
-        }
+                // 观察总次数
+                launch {
+                    viewModel.totalCount.collect { count ->
+                        try {
+                            if (count > 0) {
+                                binding.tvTotalCount.text = "${count}次"
+                            } else {
+                                binding.tvTotalCount.text = "--"
+                            }
+                        } catch (e: Exception) {
+                            binding.tvTotalCount.text = "--"
+                            e.printStackTrace()
+                        }
+                    }
+                }
 
-        // 观察已完成记录并更新图表
-        viewModel.completedSessions.observe(viewLifecycleOwner) { sessions ->
-            updateChart(sessions)
+                // 观察已完成记录并更新图表
+                launch {
+                    viewModel.completedSessions.collect { sessions ->
+                        try {
+                            updateChart(sessions)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            binding.chartFocusHistory.clear()
+                        }
+                    }
+                }
+            }
         }
     }
 

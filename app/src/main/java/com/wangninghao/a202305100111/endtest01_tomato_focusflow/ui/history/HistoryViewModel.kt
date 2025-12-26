@@ -2,11 +2,14 @@ package com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.history
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.data.local.entity.FocusSessionEntity
 import com.wangninghao.a202305100111.endtest01_tomato_focusflow.data.repository.FocusRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -15,12 +18,25 @@ import kotlinx.coroutines.launch
  */
 class HistoryViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = FocusRepository(application)
+    private val repository = FocusRepository(application.applicationContext)
+
+    private val _allSessions = MutableStateFlow<List<FocusSessionEntity>>(emptyList())
+    val allSessions: StateFlow<List<FocusSessionEntity>> = _allSessions.asStateFlow()
+
+    init {
+        loadSessions()
+    }
 
     /**
-     * 所有历史记录（Flow转LiveData，按时间倒序）
+     * 加载所有历史记录
      */
-    val allSessions = repository.getAllSessions().asLiveData()
+    private fun loadSessions() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getAllSessions().collect { sessions ->
+                _allSessions.value = sessions
+            }
+        }
+    }
 
     /**
      * 删除指定记录
