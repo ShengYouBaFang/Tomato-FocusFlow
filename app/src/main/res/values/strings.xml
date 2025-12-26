@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">endtest01_Tomato_FocusFlow</string>
+    <string name="app_name_display">Focus Flow</string>
+
+    <!-- Splash Screen -->
+    <string name="app_logo">应用图标</string>
+    <string name="developer_avatar">开发者头像</string>
+    <string name="developer_name">王宁皓</string>
+    <string name="student_id">202305100111</string>
+    <string name="enter_app">进入应用</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">专注</string>
+    <string name="nav_sound">白噪音</string>
+    <string name="nav_history">历史</string>
+    <string name="nav_about">关于</string>
+
+    <!-- Common -->
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="delete">删除</string>
+    <string name="save">保存</string>
 </resources>

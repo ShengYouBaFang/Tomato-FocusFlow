@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.home.HomeFragment"
+        android:label="专注"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_timer_setting"
+            app:destination="@id/timerSettingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/soundSelectionFragment"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.sound.SoundSelectionFragment"
+        android:label="白噪音"
+        tools:layout="@layout/fragment_sound_selection" />
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.history.HistoryFragment"
+        android:label="历史"
+        tools:layout="@layout/fragment_history">
+        <action
+            android:id="@+id/action_history_to_statistics"
+            app:destination="@id/statisticsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.about.AboutFragment"
+        android:label="关于"
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.statistics.StatisticsFragment"
+        android:label="数据统计"
+        tools:layout="@layout/fragment_statistics" />
+
+    <fragment
+        android:id="@+id/timerSettingFragment"
+        android:name="com.wangninghao.a202305100111.endtest01_tomato_focusflow.ui.timer.TimerSettingFragment"
+        android:label="倒计时设置"
+        tools:layout="@layout/fragment_timer_setting" />
+
+</navigation>

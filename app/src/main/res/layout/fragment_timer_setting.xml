@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:padding="24dp"
+    tools:context=".ui.timer.TimerSettingFragment">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="设置倒计时"
+        android:textColor="@color/text_primary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 快捷按钮 -->
+    <TextView
+        android:id="@+id/tv_quick_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="快捷设置"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <LinearLayout
+        android:id="@+id/layout_quick_buttons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_quick_title">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_10min"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="10分钟"
+            app:cornerRadius="12dp" />
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_15min"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="15分钟"
+            app:cornerRadius="12dp" />
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_30min"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="30分钟"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
+
+    <!-- 自定义时间 -->
+    <TextView
+        android:id="@+id/tv_custom_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="自定义时间"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_quick_buttons" />
+
+    <LinearLayout
+        android:id="@+id/layout_custom_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_custom_title">
+
+        <NumberPicker
+            android:id="@+id/np_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="时"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp" />
+
+        <NumberPicker
+            android:id="@+id/np_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="分"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <!-- 确认按钮 -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_confirm"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/confirm"
+        app:cornerRadius="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_custom_time" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
