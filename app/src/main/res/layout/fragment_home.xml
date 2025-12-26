@@ -88,10 +88,26 @@
         android:textColor="@color/primary"
         android:textSize="48sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/btn_settings"
+        app:layout_constraintEnd_toEndOf="@id/circular_progress"
+        app:layout_constraintStart_toStartOf="@id/circular_progress"
+        app:layout_constraintTop_toTopOf="@id/circular_progress"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <!-- 设置按钮（在圆形进度条内部） -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_settings"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="自定义时长"
+        android:textColor="@color/primary"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/circular_progress"
         app:layout_constraintEnd_toEndOf="@id/circular_progress"
         app:layout_constraintStart_toStartOf="@id/circular_progress"
-        app:layout_constraintTop_toTopOf="@id/circular_progress" />
+        app:layout_constraintTop_toBottomOf="@id/tv_time" />
 
     <!-- 控制按钮 -->
     <LinearLayout
@@ -123,17 +139,5 @@
             app:strokeColor="@color/primary"
             app:strokeWidth="2dp" />
     </LinearLayout>
-
-    <!-- 设置按钮 -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_settings"
-        style="@style/Widget.FocusFlow.Button.Secondary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="设置时长"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_buttons" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
