@@ -22,9 +22,6 @@ class HistoryAdapter(
     private val onItemClick: (FocusSessionEntity) -> Unit = {}
 ) : ListAdapter<FocusSessionEntity, HistoryAdapter.HistoryViewHolder>(HistoryDiffCallback()) {
 
-    private val whiteNoiseRepository = WhiteNoiseRepository()
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val binding = ItemHistoryBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -42,35 +39,52 @@ class HistoryAdapter(
         private val binding: ItemHistoryBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        private val whiteNoiseRepository = WhiteNoiseRepository()
+        private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+
         fun bind(session: FocusSessionEntity) {
-            binding.apply {
-                // 显示时长
-                tvDuration.text = TimeFormatter.formatTime(session.duration)
+            try {
+                binding.apply {
+                    // 显示时长 - 使用formatDuration
+                    tvDuration.text = TimeFormatter.formatDuration(session.duration)
 
-                // 显示白噪音信息
-                val whiteNoise = whiteNoiseRepository.getWhiteNoiseById(session.whiteNoiseIcon)
-                if (whiteNoise != null) {
-                    tvWhiteNoiseName.text = whiteNoise.name
-                    ivWhiteNoiseIcon.setImageResource(whiteNoise.iconRes)
-                } else {
-                    // 如果找不到对应的白噪音，使用数据库中存储的名称
-                    tvWhiteNoiseName.text = session.whiteNoiseName
-                    // 使用默认图标
-                    ivWhiteNoiseIcon.setImageResource(R.drawable.rain)
+                    // 显示白噪音信息
+                    try {
+                        val whiteNoise = whiteNoiseRepository.getWhiteNoiseById(session.whiteNoiseIcon)
+                        if (whiteNoise != null) {
+                            tvWhiteNoiseName.text = whiteNoise.name
+                            ivWhiteNoiseIcon.setImageResource(whiteNoise.iconRes)
+                        } else {
+                            // 后备方案：使用数据库存储的名称
+                            tvWhiteNoiseName.text = session.whiteNoiseName
+                            ivWhiteNoiseIcon.setImageResource(R.drawable.rain)
+                        }
+                    } catch (e: Exception) {
+                        // 异常处理：使用默认值
+                        tvWhiteNoiseName.text = session.whiteNoiseName
+                        ivWhiteNoiseIcon.setImageResource(R.drawable.rain)
+                    }
+
+                    // 显示时间信息
+                    try {
+                        val startTime = dateFormat.format(Date(session.startTime))
+                        val endTime = dateFormat.format(Date(session.endTime))
+                        tvTimeInfo.text = "$startTime - ${endTime.substring(11)}"
+                    } catch (e: Exception) {
+                        tvTimeInfo.text = "时间信息不可用"
+                    }
+
+                    // 显示完成标识
+                    ivCompleted.visibility = if (session.isCompleted) View.VISIBLE else View.GONE
+
+                    // 点击事件
+                    root.setOnClickListener {
+                        onItemClick(session)
+                    }
                 }
-
-                // 显示时间信息
-                val startTime = dateFormat.format(Date(session.startTime))
-                val endTime = dateFormat.format(Date(session.endTime))
-                tvTimeInfo.text = "$startTime - ${endTime.substring(11)}"
-
-                // 显示完成标识
-                ivCompleted.visibility = if (session.isCompleted) View.VISIBLE else View.GONE
-
-                // 点击事件
-                root.setOnClickListener {
-                    onItemClick(session)
-                }
+            } catch (e: Exception) {
+                // 整体异常处理，避免崩溃
+                e.printStackTrace()
             }
         }
     }
