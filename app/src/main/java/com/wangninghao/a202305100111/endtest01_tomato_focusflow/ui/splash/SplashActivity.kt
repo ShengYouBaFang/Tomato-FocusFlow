@@ -20,6 +20,70 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupListeners()
+        startAnimations()
+    }
+
+    private fun startAnimations() {
+        // 欢迎文本动画
+        binding.tvWelcome.alpha = 0f
+        binding.tvWelcome.translationY = -30f
+        binding.tvWelcome.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(500)
+            .start()
+
+        // 开发者头像卡片动画
+        binding.cardDeveloperAvatar.alpha = 0f
+        binding.cardDeveloperAvatar.scaleX = 0.5f
+        binding.cardDeveloperAvatar.scaleY = 0.5f
+        binding.cardDeveloperAvatar.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(600)
+            .setStartDelay(200)
+            .start()
+
+        // 开发者姓名动画
+        binding.tvDeveloperName.alpha = 0f
+        binding.tvDeveloperName.translationY = 50f
+        binding.tvDeveloperName.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(500)
+            .setStartDelay(400)
+            .start()
+
+        // 学号动画
+        binding.tvStudentId.alpha = 0f
+        binding.tvStudentId.translationY = 50f
+        binding.tvStudentId.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(500)
+            .setStartDelay(500)
+            .start()
+
+        // 应用信息动画
+        binding.tvAppInfo.alpha = 0f
+        binding.tvAppInfo.animate()
+            .alpha(1f)
+            .setDuration(400)
+            .setStartDelay(600)
+            .start()
+
+        // 按钮动画
+        binding.btnEnter.alpha = 0f
+        binding.btnEnter.scaleX = 0.8f
+        binding.btnEnter.scaleY = 0.8f
+        binding.btnEnter.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(500)
+            .setStartDelay(700)
+            .start()
     }
 
     private fun setupListeners() {

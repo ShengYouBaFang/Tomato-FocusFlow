@@ -33,6 +33,50 @@ class TimerSettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
+        animateViews()
+    }
+
+    private fun animateViews() {
+        // 标题动画
+        binding.tvTitle.alpha = 0f
+        binding.tvTitle.translationY = -50f
+        binding.tvTitle.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(400)
+            .start()
+
+        // 快捷按钮组动画
+        binding.layoutQuickButtons.alpha = 0f
+        binding.layoutQuickButtons.translationX = -100f
+        binding.layoutQuickButtons.animate()
+            .alpha(1f)
+            .translationX(0f)
+            .setDuration(400)
+            .setStartDelay(100)
+            .start()
+
+        // 自定义时间卡片动画
+        binding.cardCustomTime.alpha = 0f
+        binding.cardCustomTime.scaleX = 0.9f
+        binding.cardCustomTime.scaleY = 0.9f
+        binding.cardCustomTime.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(400)
+            .setStartDelay(200)
+            .start()
+
+        // 确认按钮动画
+        binding.btnConfirm.alpha = 0f
+        binding.btnConfirm.translationY = 50f
+        binding.btnConfirm.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(400)
+            .setStartDelay(300)
+            .start()
     }
 
     private fun setupUI() {

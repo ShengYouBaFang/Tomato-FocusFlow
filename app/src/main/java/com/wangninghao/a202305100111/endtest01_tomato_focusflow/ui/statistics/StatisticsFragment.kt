@@ -50,6 +50,60 @@ class StatisticsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupChart()
         observeViewModel()
+        animateViews()
+    }
+
+    private fun animateViews() {
+        // 标题动画
+        binding.tvTitle.alpha = 0f
+        binding.tvTitle.translationY = -50f
+        binding.tvTitle.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(400)
+            .start()
+
+        // 最长记录卡片动画
+        binding.cardLongest.alpha = 0f
+        binding.cardLongest.scaleX = 0.9f
+        binding.cardLongest.scaleY = 0.9f
+        binding.cardLongest.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(400)
+            .setStartDelay(100)
+            .start()
+
+        // 统计网格动画
+        binding.layoutStatsGrid.alpha = 0f
+        binding.layoutStatsGrid.translationX = -50f
+        binding.layoutStatsGrid.animate()
+            .alpha(1f)
+            .translationX(0f)
+            .setDuration(400)
+            .setStartDelay(200)
+            .start()
+
+        // 图表标题动画
+        binding.tvChartTitle.alpha = 0f
+        binding.tvChartTitle.translationX = -50f
+        binding.tvChartTitle.animate()
+            .alpha(1f)
+            .translationX(0f)
+            .setDuration(400)
+            .setStartDelay(300)
+            .start()
+
+        // 图表动画
+        binding.chartFocusHistory.alpha = 0f
+        binding.chartFocusHistory.translationY = 50f
+        binding.chartFocusHistory.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(500)
+            .setStartDelay(400)
+            .start()
     }
 
     private fun setupChart() {

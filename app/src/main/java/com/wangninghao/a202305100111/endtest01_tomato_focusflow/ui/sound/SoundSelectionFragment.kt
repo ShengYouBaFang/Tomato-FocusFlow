@@ -39,6 +39,18 @@ class SoundSelectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observeViewModel()
+        animateViews()
+    }
+
+    private fun animateViews() {
+        // 标题动画
+        binding.tvTitle.alpha = 0f
+        binding.tvTitle.translationY = -50f
+        binding.tvTitle.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(400)
+            .start()
     }
 
     private fun setupRecyclerView() {

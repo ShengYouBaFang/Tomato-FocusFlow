@@ -41,6 +41,30 @@ class HistoryFragment : Fragment() {
         setupRecyclerView()
         setupButtons()
         observeViewModel()
+        animateViews()
+    }
+
+    private fun animateViews() {
+        // 标题动画
+        binding.tvTitle.alpha = 0f
+        binding.tvTitle.translationY = -50f
+        binding.tvTitle.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(400)
+            .start()
+
+        // 统计按钮动画
+        binding.btnStatistics.alpha = 0f
+        binding.btnStatistics.scaleX = 0.8f
+        binding.btnStatistics.scaleY = 0.8f
+        binding.btnStatistics.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(400)
+            .setStartDelay(100)
+            .start()
     }
 
     private fun setupRecyclerView() {

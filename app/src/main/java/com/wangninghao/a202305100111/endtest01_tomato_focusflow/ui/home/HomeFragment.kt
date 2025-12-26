@@ -40,6 +40,56 @@ class HomeFragment : Fragment() {
         setupUI()
         observeViewModel()
         viewModel.bindService(requireContext())
+        animateViews()
+    }
+
+    private fun animateViews() {
+        // 标题淡入
+        binding.tvTitle.alpha = 0f
+        binding.tvTitle.animate()
+            .alpha(1f)
+            .setDuration(400)
+            .start()
+
+        // 白噪音卡片从上滑入
+        binding.cardWhiteNoise.alpha = 0f
+        binding.cardWhiteNoise.translationY = -50f
+        binding.cardWhiteNoise.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(400)
+            .setStartDelay(100)
+            .start()
+
+        // 圆形进度条缩放淡入
+        binding.circularProgress.alpha = 0f
+        binding.circularProgress.scaleX = 0.8f
+        binding.circularProgress.scaleY = 0.8f
+        binding.circularProgress.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(500)
+            .setStartDelay(200)
+            .start()
+
+        // 时间文本淡入
+        binding.tvTime.alpha = 0f
+        binding.tvTime.animate()
+            .alpha(1f)
+            .setDuration(400)
+            .setStartDelay(400)
+            .start()
+
+        // 控制按钮从下滑入
+        binding.layoutButtons.alpha = 0f
+        binding.layoutButtons.translationY = 50f
+        binding.layoutButtons.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(400)
+            .setStartDelay(500)
+            .start()
     }
 
     private fun setupUI() {
