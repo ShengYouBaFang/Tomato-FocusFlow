@@ -46,10 +46,15 @@ class WhiteNoiseAdapter(
                 ivNoiseIcon.setImageResource(whiteNoise.iconRes)
 
                 // 设置选中状态
-                root.isSelected = whiteNoise.id == selectedId
+                val isSelected = whiteNoise.id == selectedId
+                root.isSelected = isSelected
 
-                // 点击选择
-                root.setOnClickListener {
+                // 根据选中状态更新选择按钮文本
+                btnSelect.text = if (isSelected) "已选择" else "选择"
+                btnSelect.isEnabled = !isSelected
+
+                // 点击选择按钮
+                btnSelect.setOnClickListener {
                     onItemClick(whiteNoise)
                 }
 

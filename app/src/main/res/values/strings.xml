@@ -21,6 +21,7 @@
     <string name="delete">删除</string>
     <string name="save">保存</string>
     <string name="preview">试听</string>
+    <string name="select">选择</string>
 
     <!-- White Noise -->
     <string name="white_noise_icon">白噪音图标</string>
