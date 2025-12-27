@@ -145,7 +145,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun refreshSettings() {
         try {
+            // 重新加载设置以更新UI显示
             loadSettings()
+            Log.d(TAG, "设置已刷新")
         } catch (e: Exception) {
             Log.e(TAG, "刷新设置失败", e)
             ErrorHandler.handleUnknownError("刷新设置失败", e)
@@ -264,9 +266,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun resumeTimer() {
         try {
             timerService?.resumeTimer()
-            // 只有当白噪音开关打开时才恢复播放
+            // 只有当白噪音开关打开时才播放
             if (_whiteNoiseEnabled.value == true) {
-                timerService?.resumeWhiteNoise()
+                // 播放当前选择的白噪音（而不是简单恢复），以支持暂停期间切换白噪音
+                _selectedWhiteNoise.value?.let { whiteNoise ->
+                    timerService?.playWhiteNoise(whiteNoise.audioRes)
+                }
             }
             Log.d(TAG, "计时器已恢复，白噪音开关状态：${_whiteNoiseEnabled.value}")
         } catch (e: Exception) {
