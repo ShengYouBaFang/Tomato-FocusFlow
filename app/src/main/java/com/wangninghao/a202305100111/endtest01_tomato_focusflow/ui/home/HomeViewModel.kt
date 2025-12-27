@@ -249,6 +249,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun pauseTimer() {
         try {
             timerService?.pauseTimer()
+            // 暂停时总是暂停白噪音
             timerService?.pauseWhiteNoise()
             Log.d(TAG, "计时器已暂停")
         } catch (e: Exception) {
@@ -263,8 +264,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun resumeTimer() {
         try {
             timerService?.resumeTimer()
-            timerService?.resumeWhiteNoise()
-            Log.d(TAG, "计时器已恢复")
+            // 只有当白噪音开关打开时才恢复播放
+            if (_whiteNoiseEnabled.value == true) {
+                timerService?.resumeWhiteNoise()
+            }
+            Log.d(TAG, "计时器已恢复，白噪音开关状态：${_whiteNoiseEnabled.value}")
         } catch (e: Exception) {
             Log.e(TAG, "恢复计时器失败", e)
             ErrorHandler.handleTimerError("恢复计时器失败", e)
@@ -336,7 +340,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             _whiteNoiseEnabled.value = enabled
             preferenceHelper.setWhiteNoiseEnabled(enabled)
 
-            // 如果倒计时正在运行，立即控制白噪音播放
+            // 只在倒计时运行状态下立即控制白噪音播放
+            // 暂停状态下不操作，等继续时根据开关状态决定
             if (_timerState.value is TimerService.TimerState.Running) {
                 if (enabled) {
                     _selectedWhiteNoise.value?.let {
@@ -347,7 +352,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
 
-            Log.d(TAG, "白噪音开关已设置: $enabled")
+            Log.d(TAG, "白噪音开关已设置: $enabled，当前状态: ${_timerState.value}")
         } catch (e: Exception) {
             Log.e(TAG, "设置白噪音开关失败", e)
             ErrorHandler.handleUnknownError("设置白噪音开关失败", e)
