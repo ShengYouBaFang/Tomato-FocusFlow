@@ -26,6 +26,9 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
     private var rotationAnimator: ObjectAnimator? = null
 
+    // 标志位，防止开关状态循环触发
+    private var isUpdatingSwitch = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -110,7 +113,10 @@ class HomeFragment : Fragment() {
 
         // 白噪音开关
         binding.switchWhiteNoise.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setWhiteNoiseEnabled(isChecked)
+            // 只有在非程序更新时才响应用户操作
+            if (!isUpdatingSwitch) {
+                viewModel.setWhiteNoiseEnabled(isChecked)
+            }
         }
     }
 
@@ -123,7 +129,11 @@ class HomeFragment : Fragment() {
 
         // 观察白噪音开关状态
         viewModel.whiteNoiseEnabled.observe(viewLifecycleOwner) { enabled ->
+            // 设置标志位，防止触发监听器
+            isUpdatingSwitch = true
             binding.switchWhiteNoise.isChecked = enabled
+            isUpdatingSwitch = false
+
             // 根据开关状态和倒计时状态控制旋转动画
             updateRotationAnimation()
         }
@@ -148,6 +158,8 @@ class HomeFragment : Fragment() {
                     binding.tvTime.text = TimeFormatter.formatTime(duration)
                     binding.circularProgress.setProgress(1f)
                     stopRotationAnimation()
+                    // 重置图标角度
+                    binding.ivWhiteNoiseIcon.rotation = 0f
                 }
                 is TimerService.TimerState.Running -> {
                     binding.btnPlayPause.text = "暂停"
@@ -173,6 +185,8 @@ class HomeFragment : Fragment() {
                     binding.tvTime.text = "00:00"
                     binding.circularProgress.setProgress(0f)
                     stopRotationAnimation()
+                    // 重置图标角度
+                    binding.ivWhiteNoiseIcon.rotation = 0f
                 }
             }
         }
@@ -200,27 +214,31 @@ class HomeFragment : Fragment() {
      * 开始旋转动画
      */
     private fun startRotationAnimation() {
+        // 如果已经在运行，直接返回
         if (rotationAnimator?.isRunning == true) return
 
+        // 从当前角度开始旋转
+        val currentRotation = binding.ivWhiteNoiseIcon.rotation
         rotationAnimator = ObjectAnimator.ofFloat(
             binding.ivWhiteNoiseIcon,
             "rotation",
-            0f,
-            360f
+            currentRotation,
+            currentRotation + 360f
         ).apply {
             duration = 3000
             repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.RESTART
             interpolator = LinearInterpolator()
             start()
         }
     }
 
     /**
-     * 停止旋转动画
+     * 停止旋转动画（保持当前角度）
      */
     private fun stopRotationAnimation() {
         rotationAnimator?.cancel()
-        binding.ivWhiteNoiseIcon.rotation = 0f
+        rotationAnimator = null
     }
 
     /**
