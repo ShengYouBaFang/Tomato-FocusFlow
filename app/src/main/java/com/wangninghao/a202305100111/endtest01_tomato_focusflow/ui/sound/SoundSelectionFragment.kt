@@ -40,6 +40,8 @@ class SoundSelectionFragment : Fragment() {
         setupRecyclerView()
         observeViewModel()
         animateViews()
+        // 绑定TimerService以支持即时切换
+        viewModel.bindService(requireContext())
     }
 
     private fun animateViews() {
@@ -135,6 +137,8 @@ class SoundSelectionFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         stopPreview()
+        // 解绑TimerService
+        viewModel.unbindService(requireContext())
         _binding = null
     }
 }
