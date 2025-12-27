@@ -124,6 +124,8 @@ class HomeFragment : Fragment() {
         // 观察白噪音开关状态
         viewModel.whiteNoiseEnabled.observe(viewLifecycleOwner) { enabled ->
             binding.switchWhiteNoise.isChecked = enabled
+            // 根据开关状态和倒计时状态控制旋转动画
+            updateRotationAnimation()
         }
 
         // 观察倒计时时长
@@ -153,10 +155,8 @@ class HomeFragment : Fragment() {
                     binding.btnReset.isEnabled = true
                     binding.tvTime.text = TimeFormatter.formatTime(state.remainingTime)
                     binding.circularProgress.setProgress(1f - state.progress)
-                    // 只有开关打开时才旋转图标
-                    if (viewModel.whiteNoiseEnabled.value == true) {
-                        startRotationAnimation()
-                    }
+                    // 根据开关状态控制旋转动画
+                    updateRotationAnimation()
                 }
                 is TimerService.TimerState.Paused -> {
                     binding.btnPlayPause.text = "继续"
@@ -221,6 +221,20 @@ class HomeFragment : Fragment() {
     private fun stopRotationAnimation() {
         rotationAnimator?.cancel()
         binding.ivWhiteNoiseIcon.rotation = 0f
+    }
+
+    /**
+     * 根据倒计时状态和白噪音开关状态更新旋转动画
+     */
+    private fun updateRotationAnimation() {
+        val isRunning = viewModel.timerState.value is TimerService.TimerState.Running
+        val isWhiteNoiseEnabled = viewModel.whiteNoiseEnabled.value == true
+
+        if (isRunning && isWhiteNoiseEnabled) {
+            startRotationAnimation()
+        } else {
+            stopRotationAnimation()
+        }
     }
 
     override fun onResume() {
