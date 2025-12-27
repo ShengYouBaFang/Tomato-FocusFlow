@@ -20,6 +20,7 @@ object Constants {
 
     const val EXTRA_TIMER_DURATION = "EXTRA_TIMER_DURATION"
     const val EXTRA_WHITE_NOISE_ID = "EXTRA_WHITE_NOISE_ID"
+    const val EXTRA_WHITE_NOISE_ENABLED = "EXTRA_WHITE_NOISE_ENABLED"
 
     // Notification相关
     const val NOTIFICATION_CHANNEL_ID = "focus_timer_channel"

@@ -37,7 +37,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="12dp">
 
@@ -60,13 +60,21 @@
 
             <TextView
                 android:id="@+id/tv_white_noise_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                android:layout_weight="1"
                 android:text="雨声"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
+            <!-- 白噪音开关 -->
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_white_noise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

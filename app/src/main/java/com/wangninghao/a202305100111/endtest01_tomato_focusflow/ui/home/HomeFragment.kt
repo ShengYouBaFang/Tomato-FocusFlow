@@ -107,6 +107,11 @@ class HomeFragment : Fragment() {
         binding.btnSettings.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_timer_setting)
         }
+
+        // 白噪音开关
+        binding.switchWhiteNoise.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setWhiteNoiseEnabled(isChecked)
+        }
     }
 
     private fun observeViewModel() {
@@ -114,6 +119,11 @@ class HomeFragment : Fragment() {
         viewModel.selectedWhiteNoise.observe(viewLifecycleOwner) { whiteNoise ->
             binding.tvWhiteNoiseName.text = whiteNoise.name
             binding.ivWhiteNoiseIcon.setImageResource(whiteNoise.iconRes)
+        }
+
+        // 观察白噪音开关状态
+        viewModel.whiteNoiseEnabled.observe(viewLifecycleOwner) { enabled ->
+            binding.switchWhiteNoise.isChecked = enabled
         }
 
         // 观察倒计时时长
@@ -143,7 +153,10 @@ class HomeFragment : Fragment() {
                     binding.btnReset.isEnabled = true
                     binding.tvTime.text = TimeFormatter.formatTime(state.remainingTime)
                     binding.circularProgress.setProgress(1f - state.progress)
-                    startRotationAnimation()
+                    // 只有开关打开时才旋转图标
+                    if (viewModel.whiteNoiseEnabled.value == true) {
+                        startRotationAnimation()
+                    }
                 }
                 is TimerService.TimerState.Paused -> {
                     binding.btnPlayPause.text = "继续"

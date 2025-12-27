@@ -21,6 +21,7 @@ class PreferenceHelper(context: Context) {
         private const val KEY_SELECTED_WHITE_NOISE_ID = "selected_white_noise_id"
         private const val KEY_DEFAULT_TIMER_DURATION = "default_timer_duration"
         private const val KEY_IS_FIRST_LAUNCH = "is_first_launch"
+        private const val KEY_WHITE_NOISE_ENABLED = "white_noise_enabled"
 
         // 默认值
         private const val DEFAULT_TIMER_DURATION = 25 * 60 * 1000L // 25分钟（毫秒）
@@ -68,6 +69,20 @@ class PreferenceHelper(context: Context) {
      */
     fun setNotFirstLaunch() {
         prefs.edit().putBoolean(KEY_IS_FIRST_LAUNCH, false).apply()
+    }
+
+    /**
+     * 获取白噪音是否开启
+     */
+    fun isWhiteNoiseEnabled(): Boolean {
+        return prefs.getBoolean(KEY_WHITE_NOISE_ENABLED, true)
+    }
+
+    /**
+     * 设置白噪音是否开启
+     */
+    fun setWhiteNoiseEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_WHITE_NOISE_ENABLED, enabled).apply()
     }
 
     /**

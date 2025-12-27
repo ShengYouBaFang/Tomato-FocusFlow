@@ -40,6 +40,7 @@ class TimerService : Service() {
     private var startTime: Long = 0
     private var whiteNoiseId: String = "rain"
     private var whiteNoiseName: String = "雨声"
+    private var whiteNoiseEnabled: Boolean = true
     private var isRunning: Boolean = false
 
     // LiveData
@@ -84,7 +85,8 @@ class TimerService : Service() {
                 Constants.ACTION_START_TIMER -> {
                     val duration = intent.getLongExtra(Constants.EXTRA_TIMER_DURATION, 25 * 60 * 1000L)
                     val noiseId = intent.getStringExtra(Constants.EXTRA_WHITE_NOISE_ID) ?: "rain"
-                    startTimer(duration, noiseId)
+                    val noiseEnabled = intent.getBooleanExtra(Constants.EXTRA_WHITE_NOISE_ENABLED, true)
+                    startTimer(duration, noiseId, noiseEnabled)
                 }
                 Constants.ACTION_PAUSE_TIMER -> pauseTimer()
                 Constants.ACTION_RESUME_TIMER -> resumeTimer()
@@ -99,12 +101,13 @@ class TimerService : Service() {
     /**
      * 开始倒计时
      */
-    fun startTimer(duration: Long, noiseId: String) {
+    fun startTimer(duration: Long, noiseId: String, noiseEnabled: Boolean = true) {
         try {
             totalDuration = duration
             remainingTime = duration
             startTime = System.currentTimeMillis()
             whiteNoiseId = noiseId
+            whiteNoiseEnabled = noiseEnabled
 
             // 根据noiseId查询白噪音名称
             val whiteNoise = whiteNoiseRepository.getWhiteNoiseById(noiseId)

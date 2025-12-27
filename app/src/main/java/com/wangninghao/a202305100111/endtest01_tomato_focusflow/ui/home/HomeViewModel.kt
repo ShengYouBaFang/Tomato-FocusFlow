@@ -39,6 +39,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedWhiteNoise = MutableLiveData<WhiteNoise>()
     val selectedWhiteNoise: LiveData<WhiteNoise> = _selectedWhiteNoise
 
+    // 白噪音是否开启
+    private val _whiteNoiseEnabled = MutableLiveData<Boolean>()
+    val whiteNoiseEnabled: LiveData<Boolean> = _whiteNoiseEnabled
+
     // 倒计时时长
     private val _timerDuration = MutableLiveData<Long>()
     val timerDuration: LiveData<Long> = _timerDuration
@@ -121,7 +125,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             val duration = preferenceHelper.getDefaultTimerDuration()
             _timerDuration.value = duration
 
-            Log.d(TAG, "设置加载成功: noiseId=$noiseId, duration=$duration")
+            val whiteNoiseEnabled = preferenceHelper.isWhiteNoiseEnabled()
+            _whiteNoiseEnabled.value = whiteNoiseEnabled
+
+            Log.d(TAG, "设置加载成功: noiseId=$noiseId, duration=$duration, whiteNoiseEnabled=$whiteNoiseEnabled")
         } catch (e: Exception) {
             Log.e(TAG, "加载设置失败", e)
             ErrorHandler.handleUnknownError("加载设置失败", e)
@@ -129,6 +136,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             // 使用默认值
             _selectedWhiteNoise.value = whiteNoiseRepository.getDefaultWhiteNoise()
             _timerDuration.value = Constants.QUICK_TIMER_25_MIN
+            _whiteNoiseEnabled.value = true
         }
     }
 
@@ -204,21 +212,25 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         try {
             val duration = _timerDuration.value ?: Constants.QUICK_TIMER_25_MIN
             val noiseId = _selectedWhiteNoise.value?.id ?: "rain"
+            val whiteNoiseEnabled = _whiteNoiseEnabled.value ?: true
 
             val intent = Intent(context, TimerService::class.java).apply {
                 action = Constants.ACTION_START_TIMER
                 putExtra(Constants.EXTRA_TIMER_DURATION, duration)
                 putExtra(Constants.EXTRA_WHITE_NOISE_ID, noiseId)
+                putExtra(Constants.EXTRA_WHITE_NOISE_ENABLED, whiteNoiseEnabled)
             }
 
             context.startForegroundService(intent)
 
-            // 播放白噪音
-            _selectedWhiteNoise.value?.let {
-                timerService?.playWhiteNoise(it.audioRes)
+            // 只有开关打开时才播放白噪音
+            if (whiteNoiseEnabled) {
+                _selectedWhiteNoise.value?.let {
+                    timerService?.playWhiteNoise(it.audioRes)
+                }
             }
 
-            Log.d(TAG, "开始计时器: duration=$duration, noiseId=$noiseId")
+            Log.d(TAG, "开始计时器: duration=$duration, noiseId=$noiseId, whiteNoiseEnabled=$whiteNoiseEnabled")
         } catch (e: SecurityException) {
             Log.e(TAG, "启动前台服务失败：权限不足", e)
             ErrorHandler.handleServiceError("启动计时器失败：权限不足", e)
@@ -313,6 +325,32 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         } catch (e: Exception) {
             Log.e(TAG, "设置白噪音失败", e)
             ErrorHandler.handleUnknownError("设置白噪音失败", e)
+        }
+    }
+
+    /**
+     * 设置白噪音是否开启
+     */
+    fun setWhiteNoiseEnabled(enabled: Boolean) {
+        try {
+            _whiteNoiseEnabled.value = enabled
+            preferenceHelper.setWhiteNoiseEnabled(enabled)
+
+            // 如果倒计时正在运行，立即控制白噪音播放
+            if (_timerState.value is TimerService.TimerState.Running) {
+                if (enabled) {
+                    _selectedWhiteNoise.value?.let {
+                        timerService?.playWhiteNoise(it.audioRes)
+                    }
+                } else {
+                    timerService?.stopWhiteNoise()
+                }
+            }
+
+            Log.d(TAG, "白噪音开关已设置: $enabled")
+        } catch (e: Exception) {
+            Log.e(TAG, "设置白噪音开关失败", e)
+            ErrorHandler.handleUnknownError("设置白噪音开关失败", e)
         }
     }
 
