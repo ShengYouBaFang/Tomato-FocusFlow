@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.CountDownTimer
 import android.os.IBinder
+import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -37,6 +38,7 @@ class TimerService : Service() {
 
     private var countDownTimer: CountDownTimer? = null
     private var mediaPlayerManager: MediaPlayerManager? = null
+    private var wakeLock: PowerManager.WakeLock? = null
 
     // 倒计时状态
     private var totalDuration: Long = 0
@@ -66,6 +68,12 @@ class TimerService : Service() {
         super.onCreate()
         try {
             mediaPlayerManager = MediaPlayerManager(this)
+            // 获取 WakeLock 确保倒计时在后台运行
+            val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+            wakeLock = powerManager.newWakeLock(
+                PowerManager.PARTIAL_WAKE_LOCK,
+                "FocusFlow::TimerWakeLock"
+            )
             Log.d(TAG, "TimerService 创建成功")
         } catch (e: Exception) {
             Log.e(TAG, "创建 TimerService 时发生错误", e)
@@ -117,6 +125,12 @@ class TimerService : Service() {
             val whiteNoise = whiteNoiseRepository.getWhiteNoiseById(noiseId)
             whiteNoiseName = whiteNoise?.name ?: "雨声"
 
+            // 获取 WakeLock 确保倒计时持续运行
+            if (wakeLock?.isHeld == false) {
+                wakeLock?.acquire(duration + 5000L) // 额外5秒容错时间
+                Log.d(TAG, "WakeLock 已获取")
+            }
+
             startForeground(Constants.NOTIFICATION_ID,
                 NotificationHelper.createNotification(this, remainingTime, true))
 
@@ -142,6 +156,7 @@ class TimerService : Service() {
                 override fun onFinish() {
                     try {
                         isRunning = false
+                        releaseWakeLock()
                         onTimerComplete()
                         _timerState.postValue(TimerState.Completed)
                         Log.d(TAG, "倒计时完成")
@@ -158,10 +173,12 @@ class TimerService : Service() {
         } catch (e: IllegalStateException) {
             Log.e(TAG, "启动倒计时时状态异常", e)
             ErrorHandler.handleTimerError("启动倒计时失败", e)
+            releaseWakeLock()
             _timerState.postValue(TimerState.Idle)
         } catch (e: Exception) {
             Log.e(TAG, "启动倒计时时发生未知错误", e)
             ErrorHandler.handleTimerError("启动倒计时失败", e)
+            releaseWakeLock()
             _timerState.postValue(TimerState.Idle)
         }
     }
@@ -247,6 +264,7 @@ class TimerService : Service() {
         try {
             countDownTimer?.cancel()
             isRunning = false
+            releaseWakeLock()
             _timerState.postValue(TimerState.Idle)
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
@@ -267,6 +285,7 @@ class TimerService : Service() {
         try {
             countDownTimer?.cancel()
             isRunning = false
+            releaseWakeLock()
             mediaPlayerManager?.stop()
             _timerState.postValue(TimerState.Idle)
             stopForeground(STOP_FOREGROUND_REMOVE)
@@ -278,6 +297,20 @@ class TimerService : Service() {
         } catch (e: Exception) {
             Log.e(TAG, "重置倒计时时发生错误", e)
             ErrorHandler.handleTimerError("重置倒计时失败", e)
+        }
+    }
+
+    /**
+     * 释放 WakeLock
+     */
+    private fun releaseWakeLock() {
+        try {
+            if (wakeLock?.isHeld == true) {
+                wakeLock?.release()
+                Log.d(TAG, "WakeLock 已释放")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "释放 WakeLock 失败", e)
         }
     }
 
@@ -477,6 +510,7 @@ class TimerService : Service() {
     override fun onDestroy() {
         try {
             countDownTimer?.cancel()
+            releaseWakeLock()
             mediaPlayerManager?.release()
             Log.d(TAG, "TimerService 已销毁")
         } catch (e: Exception) {

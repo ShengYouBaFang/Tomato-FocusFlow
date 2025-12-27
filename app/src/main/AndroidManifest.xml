@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- 震动权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- WakeLock权限，确保倒计时在后台运行 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
