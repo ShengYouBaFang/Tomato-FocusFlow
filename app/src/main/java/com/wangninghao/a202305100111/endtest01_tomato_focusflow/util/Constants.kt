@@ -26,6 +26,9 @@ object Constants {
     const val NOTIFICATION_CHANNEL_ID = "focus_timer_channel"
     const val NOTIFICATION_CHANNEL_NAME = "专注倒计时"
     const val NOTIFICATION_ID = 1001
+    const val COMPLETION_NOTIFICATION_ID = 1002
+    const val COMPLETION_CHANNEL_ID = "focus_completion_channel"
+    const val COMPLETION_CHANNEL_NAME = "专注完成提醒"
 
     // 时间格式
     const val TIME_FORMAT_MM_SS = "mm:ss"

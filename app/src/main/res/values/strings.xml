@@ -26,4 +26,9 @@
     <!-- White Noise -->
     <string name="white_noise_icon">白噪音图标</string>
     <string name="completed_badge">完成标识</string>
+
+    <!-- Timer Completion -->
+    <string name="timer_completed_title">专注完成！</string>
+    <string name="timer_completed_message">恭喜您完成了本次专注时段</string>
+    <string name="timer_completed_action">查看详情</string>
 </resources>

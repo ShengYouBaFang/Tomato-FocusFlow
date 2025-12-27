@@ -1,10 +1,14 @@
 package com.wangninghao.a202305100111.endtest01_tomato_focusflow.service
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.CountDownTimer
 import android.os.IBinder
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -285,6 +289,12 @@ class TimerService : Service() {
             // 停止白噪音
             mediaPlayerManager?.stop()
 
+            // 发送完成通知
+            sendCompletionNotification()
+
+            // 触发震动
+            triggerVibration()
+
             // 保存完成记录到数据库
             saveSession(true)
             stopForeground(STOP_FOREGROUND_REMOVE)
@@ -292,6 +302,56 @@ class TimerService : Service() {
         } catch (e: Exception) {
             Log.e(TAG, "倒计时完成回调执行失败", e)
             ErrorHandler.handleTimerError("倒计时完成处理失败", e)
+        }
+    }
+
+    /**
+     * 发送完成通知
+     */
+    private fun sendCompletionNotification() {
+        try {
+            val notification = NotificationHelper.createCompletionNotification(this)
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
+            notificationManager.notify(Constants.COMPLETION_NOTIFICATION_ID, notification)
+            Log.d(TAG, "完成通知已发送")
+        } catch (e: SecurityException) {
+            Log.e(TAG, "发送完成通知失败：权限不足", e)
+            ErrorHandler.handleServiceError("发送通知失败：权限不足", e)
+        } catch (e: Exception) {
+            Log.e(TAG, "发送完成通知失败", e)
+            ErrorHandler.handleServiceError("发送通知失败", e)
+        }
+    }
+
+    /**
+     * 触发震动
+     */
+    private fun triggerVibration() {
+        try {
+            val vibrator = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                vibratorManager.defaultVibrator
+            } else {
+                @Suppress("DEPRECATION")
+                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            }
+
+            if (vibrator.hasVibrator()) {
+                val pattern = longArrayOf(0, 500, 200, 500, 200, 500)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator.vibrate(pattern, -1)
+                }
+                Log.d(TAG, "震动已触发")
+            }
+        } catch (e: SecurityException) {
+            Log.e(TAG, "触发震动失败：权限不足", e)
+            ErrorHandler.handleServiceError("震动失败：权限不足", e)
+        } catch (e: Exception) {
+            Log.e(TAG, "触发震动失败", e)
+            ErrorHandler.handleServiceError("震动失败", e)
         }
     }
 
@@ -342,8 +402,14 @@ class TimerService : Service() {
     private fun updateNotification() {
         try {
             val notification = NotificationHelper.createNotification(this, remainingTime, isRunning)
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
-            notificationManager.notify(Constants.NOTIFICATION_ID, notification)
+            // 使用 startForeground 更新前台服务通知，而不是 notify
+            // 这样可以确保在后台运行时通知也能持续更新
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                startForeground(Constants.NOTIFICATION_ID, notification)
+            } else {
+                val notificationManager = getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
+                notificationManager.notify(Constants.NOTIFICATION_ID, notification)
+            }
         } catch (e: SecurityException) {
             Log.e(TAG, "更新通知时权限不足", e)
             ErrorHandler.handleServiceError("更新通知失败：权限不足", e)

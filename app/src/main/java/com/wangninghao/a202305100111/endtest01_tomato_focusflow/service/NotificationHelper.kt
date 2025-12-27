@@ -38,6 +38,27 @@ object NotificationHelper {
     }
 
     /**
+     * 创建完成通知渠道
+     */
+    fun createCompletionChannel(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                Constants.COMPLETION_CHANNEL_ID,
+                Constants.COMPLETION_CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "专注完成提醒通知"
+                setShowBadge(true)
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 500, 200, 500)
+            }
+
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    /**
      * 创建前台服务通知
      */
     fun createNotification(
@@ -67,8 +88,39 @@ object NotificationHelper {
             .setSmallIcon(R.drawable.ic_home)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
+            .setOnlyAlertOnce(true)  // 只在第一次提醒，后续更新不打扰
+            .setSilent(true)  // 更新时静默
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .build()
+    }
+
+    /**
+     * 创建完成通知
+     */
+    fun createCompletionNotification(context: Context): android.app.Notification {
+        createCompletionChannel(context)
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        return NotificationCompat.Builder(context, Constants.COMPLETION_CHANNEL_ID)
+            .setContentTitle(context.getString(R.string.timer_completed_title))
+            .setContentText(context.getString(R.string.timer_completed_message))
+            .setSmallIcon(R.drawable.ic_home)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setVibrate(longArrayOf(0, 500, 200, 500))
             .build()
     }
 }
